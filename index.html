@@ -8,6 +8,56 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <h1>Animals</h1>
+    <p>
+      Filter:
+      <button class="filter" data-action="filter" data-filter="house">
+        House
+      </button>
+      <button class="filter" data-action="filter" data-filter="expelled">
+        Expelled
+      </button>
+      <button class="filter" data-action="filter" data-filter="non_expelled">
+        Non-expelled
+      </button>
+    </p>
+
+    <hr />
+
+    <table id="list">
+      <thead>
+        <tr id="sorting">
+          <th
+            data-action="sort"
+            data-sort-direction="asc"
+            data-sort="first_name"
+          >
+            First name
+          </th>
+          <th
+            data-action="sort"
+            data-sort-direction="asc"
+            data-sort="last_name"
+          >
+            Last name
+          </th>
+          <th data-action="sort" data-sort-direction="asc" data-sort="house">
+            House
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- animal template will be copied and inserted here -->
+      </tbody>
+    </table>
+
+    <template id="student">
+      <tr>
+        <td data-field="first_name">First name</td>
+        <td data-field="last_name">Last name</td>
+        <td data-field="house">House</td>
+      </tr>
+    </template>
     <script src="script.js"></script>
   </body>
 </html>
