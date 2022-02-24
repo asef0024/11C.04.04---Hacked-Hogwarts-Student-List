@@ -143,6 +143,8 @@ function sortTheList(){
   displayStudent(filteredStudents);
 };
 
+//popup functions
+
 function openPopup() {
     console.log("open sesame");
     const popup = document.querySelector(".popup");
