@@ -133,22 +133,34 @@ function filterTheList(){
 
 function selectSort(event) {
     let sortBy = event.target.dataset.sort;
-    sortTheList(sortBy);
+    const sortDir = event.target.dataset.sortDirection;
+
+    //toggle the direction
+    if (sortDir === "asc") {
+        event.target.dataset.sortDirection = "desc";
+    }else {
+        event.target.dataset.sortDirection = "asc";
+    }
+   
+    sortTheList(sortBy, sortDir);
 }
 
-function sortTheList(sortBy){
-    console.log(allStudents)
+function sortTheList(sortBy, sortDir){
     //hent datasæt fra klikket knap
     let sortedList = allStudents;
+    let direction = 1;
+    if (sortDir === "desc") {
+        direction = -1;
+    }else {
+        direction =1;
+    }
     sortedList = sortedList.sort(sortByValue);
     
     function sortByValue(a,b){
         if (a[sortBy] < b[sortBy]){
-            
-            console.log(sortedList)
-            return -1;
+            return -1 * direction;
         } else {
-            return 1;
+            return 1 * direction;
             
         };
     };
