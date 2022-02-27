@@ -6,24 +6,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hacked Hogwarts Student List</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com"> 
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300&display=swap" rel="stylesheet">
   </head>
-  <body>
-    <h1>Hacked Hogwarts Student List</h1>
 
+  <body>
+    <header>
+      <h1>Hacked Hogwarts Student List</h1>
+    </header>
     
       <p class="filter_field">
-        Filter:
-        <button class="filter" data-action="filter" data-filter="*">
-          All Students
+       
+        <div>
+        <p> Houses</p>
+        <button class="filter" data-action="filter" data-filter="Gryffindor">
+          Gryffindor
         </button>
-        <button class="filter" data-action="filter" data-filter="house">
-          House
+        <button class="filter" data-action="filter" data-filter="Slytherin">
+          Slytherin
         </button>
+        <button class="filter" data-action="filter" data-filter="Hufflepuff">
+          Hufflepuff
+        </button>
+        <button class="filter" data-action="filter" data-filter="Rawenclaw">
+          Rawenclaw
+        </button>
+      </div>
+      <p>Status</p>
         <button class="filter" data-action="filter" data-filter="expelled">
           Expelled
         </button>
         <button class="filter" data-action="filter" data-filter="non_expelled">
           Non-expelled
+        </button>
+
+        <p>Filter:</p> 
+        <button class="filter" data-action="filter" data-filter="*">
+          Remove filter(s)
         </button>
       </p>
 
@@ -44,14 +64,14 @@
             <th
               data-action="sort"
               data-sort-direction="asc"
-              data-sort="first_name"
+              data-sort="firstName"
             >
               First name
             </th>
             <th
               data-action="sort"
               data-sort-direction="asc"
-              data-sort="last_name"
+              data-sort="lastName"
             >
               Last name
             </th>

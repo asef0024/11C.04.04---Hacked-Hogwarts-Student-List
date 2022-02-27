@@ -1,7 +1,7 @@
 "use strict";
 
 const HTML = {}; 
-const allStudents= [];
+let allStudents= [];
 let studentData;
 let filteredStudents;
 
@@ -28,7 +28,7 @@ function start() {
         btn.addEventListener("click", filterTheList);
     });
     HTML.allSortBtn.forEach((btn) => {
-        btn.addEventListener("click", sortTheList);
+        btn.addEventListener("click", selectSort);
     });
 
     loadJSON();
@@ -44,7 +44,7 @@ async function loadJSON() {
 function cleaningUpJson() {
     studentData.forEach(arrayObject => {
         const student = Object.create(studentArray);
-// console.log(student)
+        // console.log(student)
         let fullName = arrayObject.fullname.trim();
         let house = arrayObject.house.trim();
         let gender = arrayObject.gender.trim();
@@ -82,15 +82,21 @@ function cleaningUpJson() {
         student.house = house.charAt(0).toUpperCase() + house.substring(1).toLowerCase();
 
         allStudents.push(student);
-        displayStudent(student);
+     //  displayStudent(student);
+        writeList(allStudents);
         
     });
     
 };
 
-function displayStudent(student) {
-    // document.querySelector("#list tbody").innerHTML = "";
+//uskriv liste
+function writeList(listToDisplay) {
+    document.querySelector("#list tbody").innerHTML = "";
+    listToDisplay.forEach(displayStudent);
+}
 
+
+function displayStudent(student) {
     const clone = document.querySelector("template#student").content.cloneNode(true);
 
     clone.querySelector("[data-field=first_name]").textContent = student.firstName;
@@ -104,43 +110,49 @@ function displayStudent(student) {
 
 
 function filterTheList(){
-    
     //hent datasæt fra klikket knap
+    let toFilteron = "house"
+    console.log("filterere du?")
     let filterType = this.dataset.filter
     if (filterType === "*"){
-       filteredStudents = allStudents;
-       
+       filteredStudents = allStudents; 
     }else{
         filteredStudents = allStudents.filter(isStudentFilter);
-  
+        console.log(filterType)
         function isStudentFilter(student) {
-            if(student.filterType === filterType){
+            if(student[toFilteron] === filterType){
                return true; 
             } else {
                return false;
             };
         };
     };
-    displayStudent(filteredStudents)
+    console.log("filteredStudents",filteredStudents)
+    writeList(filteredStudents)
 };
 
-function sortTheList(){
-    
-    //hent datasæt fra klikket knap
-    let sortFilter = this.dataset.sort;
- 
-    filteredStudents.sort(sortByValue);
+function selectSort(event) {
+    let sortBy = event.target.dataset.sort;
+    sortTheList(sortBy);
+}
 
+function sortTheList(sortBy){
+    console.log(allStudents)
+    //hent datasæt fra klikket knap
+    let sortedList = allStudents;
+    sortedList = sortedList.sort(sortByValue);
+    
     function sortByValue(a,b){
-        if (a[sortFilter] < b[sortFilter]){
+        if (a[sortBy] < b[sortBy]){
             
+            console.log(sortedList)
             return -1;
         } else {
             return 1;
             
-        }
+        };
     };
-  displayStudent(filteredStudents);
+    writeList(sortedList);
 };
 
 //popup functions
