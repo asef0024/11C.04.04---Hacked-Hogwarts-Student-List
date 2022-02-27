@@ -43,6 +43,15 @@ h1 {
   border-right: rgb(171, 219, 252) 1px dotted;
 }
 
+td[data-field="prefect"]::after {
+  content: "🏆";
+}
+
+td[data-field="prefect"][data-prefect="false"]::after {
+  content: "🏆";
+  filter: grayscale(1);
+}
+
 /* ****** STAR ******
 
 [data-field="star"] {

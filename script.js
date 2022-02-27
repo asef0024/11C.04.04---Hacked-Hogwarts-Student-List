@@ -18,6 +18,7 @@ const Student = {
     gender: "",
     imgSrc: "",
     house: "",
+    prefect: false
 };
 
 const theJsonfile = "https://petlatkea.dk/2021/hogwarts/students.json";
@@ -116,8 +117,21 @@ function displayStudent(student) {
     clone.querySelector("[data-field=house]").textContent = student.house;
 
     clone.querySelector(".popup_button").addEventListener("click", openPopup);
+   
+
+    //prefect
+    clone.querySelector("[data-field=prefect]").dataset.prefect = student.prefect;
+    clone.querySelector("[data-field=prefect]").addEventListener("click", clickPrefect);
+
+    function clickPrefect() {
+        if (student.prefect === true) {
+            student.prefect = false;
+        }else {
+            student.prefect = true;
+        }
+        buildList();
+    }
     document.querySelector("#list tbody").appendChild( clone );
-    
 };
 
 function selectFilter(event) {
@@ -183,27 +197,6 @@ function selectSort(event) {
     setSort(sortBy, sortDir);
   }
 
-// function selectSort(event) {
-//     const sortBy = event.target.dataset.sort;
-//     const sortDir = event.target.dataset.sortDirection;
-
-//     //find "old" sortBy element 
-//     const oldElement = document.querySelector(`[data-sort='${settings.sortBy}']`);
-//     console.log(document.querySelector(`[data-sort='${settings.sortBy}']`))
-//     oldElement.classList.remove("sortby");
-
-//     //indicate active sort
-//     event.target.classList.add("sortby");
-
-//     //toggle the direction
-//     if (sortDir === "asc") {
-//         event.target.dataset.sortDirection = "desc";
-//     }else {
-//         event.target.dataset.sortDirection = "asc";
-//     }
-   
-//     setSort(sortBy, sortDir);
-// }
 
 function setSort(sortBy, sortDir) {
     settings.sortBy = sortBy;
