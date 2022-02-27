@@ -1,3 +1,15 @@
+* {
+  font-family: "Montserrat", sans-serif;
+  color: black;
+  margin: 10px 5px;
+  font-size: 12px;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
 [data-action] {
   cursor: pointer;
 }
@@ -15,7 +27,7 @@
 }
 
 #list tbody tr:nth-child(odd) td {
-  background-color: lightblue;
+  background-color: #b8ddb8;
   border-right: rgb(240, 249, 255) 1px dotted;
 }
 
@@ -39,24 +51,44 @@
   text-align: center;
 }
 
-.the_list {
+#list {
 }
 
 .fact_box {
   background-color: bisque;
-  height: 50vw;
-  width: 20vw;
+  height: 20vw;
+  width: 80vw;
 }
 
 .search_field {
   background-color: #f9af1d;
   height: 10vw;
-  width: 20vw;
+  width: 80vw;
 }
 
-.student_overview {
-  display: grid;
-  grid-template-columns: 30% auto;
+/* web format */
+
+@media (min-width: 750px) {
+  * {
+    font-size: 16px;
+  }
+
+  .fact_box {
+    background-color: bisque;
+    height: 50vw;
+    width: 20vw;
+  }
+
+  .search_field {
+    background-color: #f9af1d;
+    height: 10vw;
+    width: 20vw;
+  }
+
+  .student_overview {
+    display: grid;
+    grid-template-columns: 30% auto;
+  }
 }
 
 .popup {
@@ -70,6 +102,12 @@
   border-radius: 25px;
   background-color: #f967ac;
   padding: 30px;
+}
+
+.popup_button {
+  border: none;
+  background-color: transparent;
+  text-decoration: underline;
 }
 
 .popup .closePopup {
