@@ -2,10 +2,15 @@
 
 const HTML = {}; 
 let allStudents= [];
-let studentData;
 let filteredStudents;
+// let filterBy = "*";
+const settings = {
+    filterBy : "*",
+    sortBy : "name",
+    sortDir:  "asc"
+}
 
-const studentArray = {
+const Student = {
     firstName: "",
     lastName: "",
     middleName: "",
@@ -20,13 +25,11 @@ const theJsonfile = "https://petlatkea.dk/2021/hogwarts/students.json";
 window.addEventListener("DOMContentLoaded", start);
 
 function start() {
-    // make buttons into variables
-    HTML.allFilterBtn = document.querySelectorAll("[data-action=filter]");
+    registeredButtons();
+  
     HTML.allSortBtn = document.querySelectorAll("[data-action=sort]");
       // Add event-listeners to btn and run the filter animal list
-    HTML.allFilterBtn.forEach((btn) => {
-        btn.addEventListener("click", filterTheList);
-    });
+
     HTML.allSortBtn.forEach((btn) => {
         btn.addEventListener("click", selectSort);
     });
@@ -34,65 +37,74 @@ function start() {
     loadJSON();
 };
 
+function registeredButtons() {
+    document.querySelectorAll("[data-action=filter]")
+    .forEach(button => button.addEventListener("click", selectFilter))
+}
+
 async function loadJSON() {
-    const jsonData = await fetch(theJsonfile);
-    studentData = await jsonData.json();
+    const response = await fetch(theJsonfile);
+    let jsonData = await response.json();
     
-    cleaningUpJson();
+    // cleaningUpJson();
+    prepareObjects (jsonData);
 };
 
-function cleaningUpJson() {
-    studentData.forEach(arrayObject => {
-        const student = Object.create(studentArray);
-        // console.log(student)
-        let fullName = arrayObject.fullname.trim();
-        let house = arrayObject.house.trim();
-        let gender = arrayObject.gender.trim();
+function prepareObjects(jsonData) {
+    allStudents = jsonData.map( prepareObject);
+
+    displayList(allStudents)
+}
+
+function prepareObject(jsonObject) {
+    const student = Object.create(Student)
+        
+    let fullName = jsonObject.fullname.trim();
+    let house = jsonObject.house.trim();
+    let gender = jsonObject.gender.trim();
           
-        //Make firstnames
-        student.firstName = 
-        fullName.substring(0,1).toUpperCase() + 
-        fullName.substring(1, fullName.indexOf(" ")).toLowerCase();
+    //Make firstnames
+    student.firstName = 
+    fullName.substring(0,1).toUpperCase() + 
+    fullName.substring(1, fullName.indexOf(" ")).toLowerCase();
 
-        //Make lastnames
-        student.lastName =
-        fullName
-        .substring(fullName.lastIndexOf(" ") + 1, fullName.lastIndexOf(" ") + 2)
-        .toUpperCase() + fullName.substring(fullName.lastIndexOf(" ") + 2).toLowerCase();
+    //Make lastnames
+    student.lastName =
+    fullName
+    .substring(fullName.lastIndexOf(" ") + 1, fullName.lastIndexOf(" ") + 2)
+    .toUpperCase() + fullName.substring(fullName.lastIndexOf(" ") + 2).toLowerCase();
 
-        //Make middlename
-        student.middleName =
-        fullName
-        .substring(fullName.indexOf(" "), fullName.lastIndexOf(" "))
-        .trim().substring(0, 1).toUpperCase() +
-        fullName
-        .substring(fullName.indexOf(" "), fullName.lastIndexOf(" "))
-        .trim().substring(1).toLowerCase();
+    //Make middlename
+    student.middleName =
+    fullName
+    .substring(fullName.indexOf(" "), fullName.lastIndexOf(" "))
+    .trim().substring(0, 1).toUpperCase() +
+    fullName
+    .substring(fullName.indexOf(" "), fullName.lastIndexOf(" "))
+    .trim().substring(1).toLowerCase();
 
-        //Nickname
-        if (fullName.includes(`"`)) {
-            student.nickName = fullName.substring(fullName.indexOf(`"`) + 1, fullName.lastIndexOf(`"`));
-            student.middleName = "";
+    //Nickname
+    if (fullName.includes(`" "`)) {
+        student.nickName = fullName.substring(fullName.indexOf(`"`) + 1, fullName.lastIndexOf(`"`));
+        student.middleName = "";
         }
           
-        // Gender
-        student.gender = gender.charAt(0).toUpperCase() + gender.substring(1).toLowerCase();
+    // Gender
+    student.gender = gender.charAt(0).toUpperCase() + gender.substring(1).toLowerCase();
 
-        //House
-        student.house = house.charAt(0).toUpperCase() + house.substring(1).toLowerCase();
+    //House
+    student.house = house.charAt(0).toUpperCase() + house.substring(1).toLowerCase();
 
-        allStudents.push(student);
+    allStudents.push(student);
      //  displayStudent(student);
-        writeList(allStudents);
-        
-    });
-    
+    displayList(allStudents);  
+    return student 
 };
 
 //uskriv liste
-function writeList(listToDisplay) {
+function displayList(students) {
     document.querySelector("#list tbody").innerHTML = "";
-    listToDisplay.forEach(displayStudent);
+    students.forEach(displayStudent);
 }
 
 
@@ -108,32 +120,59 @@ function displayStudent(student) {
     
 };
 
+function selectFilter(event) {
+    let filter = event.target.dataset.filter;
+    console.log(filter)
+    setFilter(filter);
+}
 
-function filterTheList(){
-    //hent datasæt fra klikket knap
-    let toFilteron = "house"
-    console.log("filterere du?")
-    let filterType = this.dataset.filter
-    if (filterType === "*"){
-       filteredStudents = allStudents; 
-    }else{
-        filteredStudents = allStudents.filter(isStudentFilter);
-        console.log(filterType)
-        function isStudentFilter(student) {
-            if(student[toFilteron] === filterType){
-               return true; 
-            } else {
-               return false;
-            };
-        };
-    };
-    console.log("filteredStudents",filteredStudents)
-    writeList(filteredStudents)
+function setFilter(filter) {
+    settings.filterBy =filter;
+    buildList();
+    
+}
+
+function filterList(filteredStudents){
+console.log("filterere du?")
+    
+    if (settings.filterBy === "Gryffindor"){
+       filteredStudents = allStudents.filter(filterByGryffindor); 
+       console.log(filteredStudents)
+    }else if (settings.filterBy === "Slytherin"){
+        filteredStudents = allStudents.filter(filterBySlytherin);    
+    }else if (settings.filterBy === "Hufflepuff"){
+        filteredStudents = allStudents.filter(filterByHufflepuff);    
+    }else if (settings.filterBy === "Rawenclaw"){
+        filteredStudents = allStudents.filter(filterByRawenclaw);    
+    }
+    return filteredStudents;
 };
+
+function filterByGryffindor(student) {
+    
+    return student.house === "Gryffindor";
+}
+function filterBySlytherin(student) {
+    return student.house === "Slytherin";
+}
+function filterByHufflepuff(student) {
+    return student.house === "Hufflepuff";
+}
+function filterByRawenclaw(student) {
+    return student.house === "Rawenclaw";
+}
+
 
 function selectSort(event) {
     let sortBy = event.target.dataset.sort;
     const sortDir = event.target.dataset.sortDirection;
+
+    //find "old" sortBy element 
+    const oldElement = document.querySelector("[data-sort=`${settings.sortBy}`]");
+    oldElement.classList.remove("sortby");
+
+    //indicate active sort
+    event.target.classList.add("sortby");
 
     //toggle the direction
     if (sortDir === "asc") {
@@ -142,30 +181,42 @@ function selectSort(event) {
         event.target.dataset.sortDirection = "asc";
     }
    
-    sortTheList(sortBy, sortDir);
+    setSort(sortBy, sortDir);
 }
 
-function sortTheList(sortBy, sortDir){
-    //hent datasæt fra klikket knap
-    let sortedList = allStudents;
+function setSort(sortBy, sortDir) {
+    settings.sortBy = sortBy;
+    settings.sortDir =sortDir;
+    buildList();
+}
+
+function sortList(sortedList){
+
+    
     let direction = 1;
-    if (sortDir === "desc") {
+    if (settings.sortDir === "desc") {
         direction = -1;
     }else {
         direction =1;
     }
     sortedList = sortedList.sort(sortByValue);
-    
     function sortByValue(a,b){
-        if (a[sortBy] < b[sortBy]){
+        if (a[settings.sortBy] < b[settings.sortBy]){
             return -1 * direction;
         } else {
             return 1 * direction;
             
         };
     };
-    writeList(sortedList);
+    return sortedList;
 };
+
+function buildList() {
+    let currentList = filterList(allStudents);
+    const sortedList = sortList(currentList);
+
+    displayList(sortedList);
+}
 
 //popup functions
 
