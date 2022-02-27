@@ -6,7 +6,7 @@ let filteredStudents;
 // let filterBy = "*";
 const settings = {
     filterBy : "*",
-    sortBy : "name",
+    sortBy : "firstName",
     sortDir:  "asc"
 }
 
@@ -162,27 +162,48 @@ function filterByRawenclaw(student) {
     return student.house === "Rawenclaw";
 }
 
-
 function selectSort(event) {
-    let sortBy = event.target.dataset.sort;
+    const sortBy = event.target.dataset.sort;
     const sortDir = event.target.dataset.sortDirection;
-
-    //find "old" sortBy element 
-    const oldElement = document.querySelector("[data-sort=`${settings.sortBy}`]");
+  
+    // find old sorting element
+    const oldElement = document.querySelector(`[data-sort='${settings.sortBy}']`);
     oldElement.classList.remove("sortby");
-
-    //indicate active sort
+  
+    // show arrow and indicate whats sorting / add class to active sort
     event.target.classList.add("sortby");
-
-    //toggle the direction
+  
+    // toggle the direction
     if (sortDir === "asc") {
-        event.target.dataset.sortDirection = "desc";
-    }else {
-        event.target.dataset.sortDirection = "asc";
+      event.target.dataset.sortDirection = "desc";
+    } else {
+      event.target.dataset.sortDirection = "asc";
     }
-   
+    // console.log(`user selected ${sortBy} - ${sortDir}`);
     setSort(sortBy, sortDir);
-}
+  }
+
+// function selectSort(event) {
+//     const sortBy = event.target.dataset.sort;
+//     const sortDir = event.target.dataset.sortDirection;
+
+//     //find "old" sortBy element 
+//     const oldElement = document.querySelector(`[data-sort='${settings.sortBy}']`);
+//     console.log(document.querySelector(`[data-sort='${settings.sortBy}']`))
+//     oldElement.classList.remove("sortby");
+
+//     //indicate active sort
+//     event.target.classList.add("sortby");
+
+//     //toggle the direction
+//     if (sortDir === "asc") {
+//         event.target.dataset.sortDirection = "desc";
+//     }else {
+//         event.target.dataset.sortDirection = "asc";
+//     }
+   
+//     setSort(sortBy, sortDir);
+// }
 
 function setSort(sortBy, sortDir) {
     settings.sortBy = sortBy;

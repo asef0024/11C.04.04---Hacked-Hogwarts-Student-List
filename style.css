@@ -18,6 +18,14 @@ h1 {
   text-decoration: underline;
 }
 
+#sorting th.sortby[data-sort-direction="asc"]::after {
+  content: "▼";
+}
+
+#sorting th.sortby[data-sort-direction="desc"]::after {
+  content: "▲";
+}
+
 #list {
   border-collapse: collapse;
 }
