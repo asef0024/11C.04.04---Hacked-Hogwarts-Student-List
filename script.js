@@ -21,15 +21,21 @@ const Student = {
     prefect: false
 };
 
-const theJsonfile = "https://petlatkea.dk/2021/hogwarts/students.json";
+const Fullblood = {
+
+}
+
+const theJsonfile1 = "https://petlatkea.dk/2021/hogwarts/families.json";
+const theJsonfile2 = "https://petlatkea.dk/2021/hogwarts/students.json";
 
 //................................................//
 
 window.addEventListener("DOMContentLoaded", start);
 
-function start() {
+async function start() {
     registeredButtons();
-    loadJSON();
+    // await loadJSON1();
+    await loadJSON2();
 };
 
 function registeredButtons() {
@@ -37,19 +43,50 @@ function registeredButtons() {
     .forEach(button => button.addEventListener("click", selectFilter))
     document.querySelectorAll("[data-action=sort]")
     .forEach(button => button.addEventListener("click", selectSort))
+    document.querySelector("#search").addEventListener("input", searchFieldInput);
 }
+
+//........................SEARCH FIELD........................//
+
+function searchFieldInput(evt) {
+    // write to the list with only those elemnts in the allAnimals array that has properties containing the search frase
+    displayList(
+      allStudents.filter((student) => {
+        // comparing in uppercase so that m is the same as M
+        return student.firstName.toUpperCase().includes(evt.target.value.toUpperCase()) || student.lastName.toUpperCase().includes(evt.target.value.toUpperCase()) || student.house.toUpperCase().includes(evt.target.value.toUpperCase());
+      })
+    );
+  }
 
 //........................JSON........................//
 
-async function loadJSON() {
-    const response = await fetch(theJsonfile);
+// async function loadJSON1() {
+//     const response = await fetch(theJsonfile1);
+//     let jsonData = await response.json();
+//   //  return  jsonData1;
+//     // cleaningUpJson();
+//     prepareBloodStatus (jsonData);
+// };
+
+// function prepareBloodStatus(jsonData){
+//     //allFamilies = jsonData.map(bloodStatusPrepared);
+//     console.log(jsonData)
+// }
+
+// function bloodStatusPrepared(fullBloodObject) {
+//     const fullblood = Object.create(Fullblood)
+// }
+
+async function loadJSON2() {
+    const response = await fetch(theJsonfile2);
     let jsonData = await response.json();
-    
-    // cleaningUpJson();
+  
     prepareObjects (jsonData);
 };
 
 function prepareObjects(jsonData) {
+    
+    console.log("prepareObjects",jsonData)
     allStudents = jsonData.map( prepareObject);
 
     buildList();
@@ -242,6 +279,7 @@ function makePrefects(selectedStudent) {
     const prefects = allStudents.filter( student => student.prefect);
     const numberOfPrefects = prefects.length;
     const other = prefects.filter(student => student.house === selectedStudent.house).shift();
+    console.log(other)
    
     console.log(numberOfPrefects)
     //if there is another of the same gender
@@ -292,8 +330,8 @@ function makePrefects(selectedStudent) {
         document.querySelector("#remove_aorb .closebutton").addEventListener("click", closeDialog);
         document.querySelector("#remove_aorb #removeA").addEventListener("click", clickRemoveA);
         document.querySelector("#remove_aorb #removeB").addEventListener("click", clickRemoveB);
-        document.querySelector("#remove_aorb[data-field=prefectA]").textContent = prefectA.firstName;
-        document.querySelector("#remove_aorb[data-field=prefectB]").textContent = prefectB.firstName;
+        document.querySelector("#remove_aorb [data-field=prefectA]").textContent = prefectA.firstName;
+        document.querySelector("#remove_aorb [data-field=prefectB]").textContent = prefectB.firstName;
 
         
         //if ignore - do nothing
@@ -301,7 +339,7 @@ function makePrefects(selectedStudent) {
         document.querySelector("#remove_aorb").classList.add("hide");
         document.querySelector("#remove_aorb .closebutton").removeEventListener("click", closeDialog);
         document.querySelector("#remove_aorb #removeA").removeEventListener("click", clickRemoveA);
-        document.querySelector("#remove_aorb #removeB").removeventListener("click", clickRemoveB);
+        document.querySelector("#remove_aorb #removeB").removeEventListener("click", clickRemoveB);
         }
 
         //if removeA:
