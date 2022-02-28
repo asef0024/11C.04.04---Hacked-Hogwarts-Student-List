@@ -53,11 +53,16 @@ function searchFieldInput(evt) {
     displayList(
       allStudents.filter((student) => {
         // comparing in uppercase so that m is the same as M
-        return student.firstName.toUpperCase().includes(evt.target.value.toUpperCase()) || student.lastName.toUpperCase().includes(evt.target.value.toUpperCase()) || student.house.toUpperCase().includes(evt.target.value.toUpperCase());
+        let value =student.firstName.toUpperCase().includes(evt.target.value.toUpperCase()) 
+        || student.lastName.toUpperCase().includes(evt.target.value.toUpperCase())
+        || student.house.toUpperCase().includes(evt.target.value.toUpperCase());
+  
+        return value;
       })
     );
   }
 
+  
 //........................JSON........................//
 
 // async function loadJSON1() {
@@ -102,36 +107,57 @@ function prepareObject(jsonObject) {
 
           
     //Make firstnames
-    student.firstName = 
-    fullName.substring(0,1).toUpperCase() + 
-    fullName.substring(1, fullName.indexOf(" ")).toLowerCase();
+    if (fullName.includes(" ")) {
+        student.firstName = 
+        fullName.substring(0,1).toUpperCase() + 
+        fullName.substring(1, fullName.indexOf(" ")).toLowerCase();
+    }else {
+        student.firstName =
+        fullName.substring(0, 1).toUpperCase() + fullName.substring(1).toLowerCase();
+    }
+    
 
     //Make lastnames
-    student.lastName =
-    fullName
-    .substring(fullName.lastIndexOf(" ") + 1, fullName.lastIndexOf(" ") + 2)
-    .toUpperCase() + fullName.substring(fullName.lastIndexOf(" ") + 2).toLowerCase();
+    if (fullName.includes(" ")){
+        student.lastName =
+        fullName
+        .substring(fullName.lastIndexOf(" ") + 1, fullName.lastIndexOf(" ") + 2)
+        .toUpperCase() + fullName.substring(fullName.lastIndexOf(" ") + 2).toLowerCase();
+    }
 
     //Make middlename
-    student.middleName =
-    fullName
-    .substring(fullName.indexOf(" "), fullName.lastIndexOf(" "))
-    .trim().substring(0, 1).toUpperCase() +
-    fullName
-    .substring(fullName.indexOf(" "), fullName.lastIndexOf(" "))
-    .trim().substring(1).toLowerCase();
+    student.middleName = fullName.substring(
+        fullName.indexOf(" ") + 1,
+        fullName.lastIndexOf(" ")
+      );
+      student.middleName =
+        student.middleName.substring(0, 1).toUpperCase() +
+        student.middleName.substring(1).toLowerCase();
 
     //Nickname
-    if (fullName.includes(" ")) {
-        student.nickName = fullName.substring(fullName.indexOf(`"`) + 1, fullName.lastIndexOf(`"`));
+    if (fullName.includes(`"`)) {
         student.middleName = "";
-        }
+        student.nickName = fullName.substring(
+            fullName.indexOf(`"`),
+            fullName.lastIndexOf(`"`) + 1
+        );
+      }
           
     // Gender
     student.gender = gender.charAt(0).toUpperCase() + gender.substring(1).toLowerCase();
 
     //House
     student.house = house.charAt(0).toUpperCase() + house.substring(1).toLowerCase();
+
+    //img 
+    student.imgSrc = `./images/${fullName
+        .substring(0, fullName.indexOf(" "))
+        .toLowerCase()}_.png`;
+      student.imgSrc = `./images/${
+        fullName
+          .substring(fullName.lastIndexOf(" ") + 1, fullName.lastIndexOf(" ") + 2)
+          .toLowerCase() + fullName.substring(fullName.lastIndexOf(" ") + 2).toLowerCase()
+      }_${fullName.substring(0, 1).toUpperCase().toLowerCase()}.png`;
 
     allStudents.push(student);
      //  displayStudent(student);
@@ -279,20 +305,26 @@ function makePrefects(selectedStudent) {
     const prefects = allStudents.filter( student => student.prefect);
     const numberOfPrefects = prefects.length;
     const other = prefects.filter(student => student.house === selectedStudent.house).shift();
-    console.log(other)
    
-    console.log(numberOfPrefects)
-    //if there is another of the same gender
-
-    if ( other !== undefined) {
-        console.log("there can only be 1 prefect of each gender");
+   
+    if ( other !== undefined ,  numberOfPrefects >= 3) {
+        console.log(other, "there can only be 1 prefect of each house");
         removeOther(other);
-    }else if (numberOfPrefects >= 2) {
+    }else if ( selectedStudent.house === numberOfPrefects) {
         console.log("there can only be 2 prefects");
         removeAorB(prefects[0],prefects[1]);
     }else{
         makePrefects(selectedStudent);
     }
+    // if ( other !== undefined) {
+    //     console.log("there can only be 1 prefect of each house");
+    //     removeOther(other);
+    // }else if ( selectedStudent.house === numberOfPrefects >= 2) {
+    //     console.log("there can only be 2 prefects");
+    //     removeAorB(prefects[0],prefects[1]);
+    // }else{
+    //     makePrefects(selectedStudent);
+    // }
 
   
 
