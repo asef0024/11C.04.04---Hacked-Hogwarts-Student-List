@@ -1,6 +1,6 @@
 "use strict";
 
-const HTML = {}; 
+//........................VARIABLES........................//
 let allStudents= [];
 let filteredStudents;
 // let filterBy = "*";
@@ -23,25 +23,23 @@ const Student = {
 
 const theJsonfile = "https://petlatkea.dk/2021/hogwarts/students.json";
 
+//................................................//
+
 window.addEventListener("DOMContentLoaded", start);
 
 function start() {
     registeredButtons();
-  
-    HTML.allSortBtn = document.querySelectorAll("[data-action=sort]");
-      // Add event-listeners to btn and run the filter animal list
-
-    HTML.allSortBtn.forEach((btn) => {
-        btn.addEventListener("click", selectSort);
-    });
-
     loadJSON();
 };
 
 function registeredButtons() {
     document.querySelectorAll("[data-action=filter]")
     .forEach(button => button.addEventListener("click", selectFilter))
+    document.querySelectorAll("[data-action=sort]")
+    .forEach(button => button.addEventListener("click", selectSort))
 }
+
+//........................JSON........................//
 
 async function loadJSON() {
     const response = await fetch(theJsonfile);
@@ -54,15 +52,17 @@ async function loadJSON() {
 function prepareObjects(jsonData) {
     allStudents = jsonData.map( prepareObject);
 
-    displayList(allStudents)
+    buildList();
 }
 
 function prepareObject(jsonObject) {
     const student = Object.create(Student)
+    
         
     let fullName = jsonObject.fullname.trim();
     let house = jsonObject.house.trim();
     let gender = jsonObject.gender.trim();
+
           
     //Make firstnames
     student.firstName = 
@@ -85,7 +85,7 @@ function prepareObject(jsonObject) {
     .trim().substring(1).toLowerCase();
 
     //Nickname
-    if (fullName.includes(`" "`)) {
+    if (fullName.includes(" ")) {
         student.nickName = fullName.substring(fullName.indexOf(`"`) + 1, fullName.lastIndexOf(`"`));
         student.middleName = "";
         }
@@ -102,7 +102,8 @@ function prepareObject(jsonObject) {
     return student 
 };
 
-//uskriv liste
+//........................RENDER LIST........................//
+
 function displayList(students) {
     document.querySelector("#list tbody").innerHTML = "";
     students.forEach(displayStudent);
@@ -127,12 +128,21 @@ function displayStudent(student) {
         if (student.prefect === true) {
             student.prefect = false;
         }else {
-            student.prefect = true;
+            makePrefects(student);
         }
         buildList();
     }
     document.querySelector("#list tbody").appendChild( clone );
-};
+}
+
+function buildList() {
+    let currentList = filterList(allStudents);
+    const sortedList = sortList(currentList);
+
+    displayList(sortedList);
+}
+
+//........................FILTERING........................//
 
 function selectFilter(event) {
     let filter = event.target.dataset.filter;
@@ -147,7 +157,6 @@ function setFilter(filter) {
 }
 
 function filterList(filteredStudents){
-console.log("filterere du?")
     
     if (settings.filterBy === "Gryffindor"){
        filteredStudents = allStudents.filter(filterByGryffindor); 
@@ -175,6 +184,8 @@ function filterByHufflepuff(student) {
 function filterByRawenclaw(student) {
     return student.house === "Rawenclaw";
 }
+
+//........................SORT........................//
 
 function selectSort(event) {
     const sortBy = event.target.dataset.sort;
@@ -205,8 +216,6 @@ function setSort(sortBy, sortDir) {
 }
 
 function sortList(sortedList){
-
-    
     let direction = 1;
     if (settings.sortDir === "desc") {
         direction = -1;
@@ -225,14 +234,102 @@ function sortList(sortedList){
     return sortedList;
 };
 
-function buildList() {
-    let currentList = filterList(allStudents);
-    const sortedList = sortList(currentList);
 
-    displayList(sortedList);
+//........................PREFECT........................//
+
+function makePrefects(selectedStudent) {
+
+    const prefects = allStudents.filter( student => student.prefect);
+    const numberOfPrefects = prefects.length;
+    const other = prefects.filter(student => student.house === selectedStudent.house).shift();
+   
+    console.log(numberOfPrefects)
+    //if there is another of the same gender
+
+    if ( other !== undefined) {
+        console.log("there can only be 1 prefect of each gender");
+        removeOther(other);
+    }else if (numberOfPrefects >= 2) {
+        console.log("there can only be 2 prefects");
+        removeAorB(prefects[0],prefects[1]);
+    }else{
+        makePrefects(selectedStudent);
+    }
+
+  
+
+    function removeOther(other) {
+        document.querySelector("#remove_other").classList.remove("hide");
+        document.querySelector("#remove_other .closebutton").addEventListener("click", closeDialog);
+        document.querySelector("#remove_other #removeother").addEventListener("click", clickRemoveOther);
+        document.querySelector("#remove_other [data-field=otherprefect]").textContent = other.firstName;
+
+         // ask the user to ignore or remove "others"
+        function closeDialog() {
+            document.querySelector("#remove_other").classList.add("hide");
+            document.querySelector("#remove_other #removeother").removeEventListener("click", clickRemoveOther);
+            document.querySelector("#remove_other .closebutton").removeEventListener("click", closeDialog);
+        }
+        //if ignore - do nothing
+        function clickRemoveOther() {
+            removePrefect(other);
+            makePrefects(selectedStudent);
+            buildList();
+            closeDialog();
+        }
+        
+
+        //if remove other:
+        removePrefect(other);
+        makePrefects(selectedStudent);
+
+    }
+
+    function removeAorB(prefectA, prefectB) {
+
+        //ask to ignore or remove A og B
+        document.querySelector("#remove_aorb").classList.remove("hide");
+        document.querySelector("#remove_aorb .closebutton").addEventListener("click", closeDialog);
+        document.querySelector("#remove_aorb #removeA").addEventListener("click", clickRemoveA);
+        document.querySelector("#remove_aorb #removeB").addEventListener("click", clickRemoveB);
+        document.querySelector("#remove_aorb[data-field=prefectA]").textContent = prefectA.firstName;
+        document.querySelector("#remove_aorb[data-field=prefectB]").textContent = prefectB.firstName;
+
+        
+        //if ignore - do nothing
+        function closeDialog(){
+        document.querySelector("#remove_aorb").classList.add("hide");
+        document.querySelector("#remove_aorb .closebutton").removeEventListener("click", closeDialog);
+        document.querySelector("#remove_aorb #removeA").removeEventListener("click", clickRemoveA);
+        document.querySelector("#remove_aorb #removeB").removeventListener("click", clickRemoveB);
+        }
+
+        //if removeA:
+        function clickRemoveA() {
+            removePrefect(prefectA);
+            makePrefects(selectedStudent);
+            buildList();
+            closeDialog();
+        }
+        //else -if removeB
+        function clickRemoveB() {
+            removePrefect(prefectB);
+            makePrefects(selectedStudent);
+            buildList();
+            closeDialog();
+        }
+    }
+
+    function removePrefect(prefectStudent) {
+        prefectStudent.prefect = false;
+    }
+
+    function makePrefects(student) {
+        student.prefect = true;
+    }
 }
 
-//popup functions
+//........................POP UP........................//
 
 function openPopup() {
     console.log("open sesame");
