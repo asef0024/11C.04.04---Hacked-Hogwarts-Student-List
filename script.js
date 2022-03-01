@@ -141,13 +141,13 @@ function prepareObject(jsonObject) {
     student.house = house.charAt(0).toUpperCase() + house.substring(1).toLowerCase();
 
     //img 
-    student.imgSrc = `/images ${fullName.substring(0, fullName.indexOf(" ")).toLowerCase()}_.png`;
-    //   student.imgSrc = `/images ${fullName
-    //       .substring(fullName.lastIndexOf(" ") + 1, fullName.lastIndexOf(" ") + 2)
-    //       .toLowerCase() + fullName.substring(fullName.lastIndexOf(" ") + 2).toLowerCase()
-    //   }_${fullName.substring(0, 1).toUpperCase().toLowerCase()}.png`;
+    student.imgSrc = `./images/${fullName.substring(0, fullName.indexOf(" ")).toLowerCase()}_.png`;
+      student.imgSrc = `./images/${fullName
+          .substring(fullName.lastIndexOf(" ") + 1, fullName.lastIndexOf(" ") + 2)
+          .toLowerCase() + fullName.substring(fullName.lastIndexOf(" ") + 2).toLowerCase()
+      }_${fullName.substring(0, 1).toUpperCase().toLowerCase()}.png`;
 
-    //   console.log(student.imgSrc)
+ 
 
     student.bloodStatus = getBloodStatus(student);
 
@@ -453,13 +453,13 @@ function openPopup(student) {
     }else if (student.house === "Hufflepuff") {
         document.querySelector(".popup").style.backgroundColor = "black";
         document.querySelector(".popup .crest").src = "assets/Hufflepuff.svg";
-        document.querySelectorAll(".popup p").style.color = "white";
+        document.querySelector(".popup .popup_text").style.color = "#FFFFFF";
     }else if (student.house === "Ravenclaw") {
         document.querySelector(".popup").style.backgroundColor = "blue";
         document.querySelector(".popup .crest").src = "assets/Rawenclaw.svg";
     }
 
-    document.querySelector("img").scr = student.imgSrc;
+    document.querySelector(".student_img").src = student.imgSrc;
 
     document.querySelector(".expel_student").addEventListener("click", () => expelStudent(student));
 };

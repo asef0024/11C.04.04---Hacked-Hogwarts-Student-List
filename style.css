@@ -93,7 +93,7 @@ td[data-field="prefect"][data-prefect="false"]::after {
 
   .fact_box {
     background-color: bisque;
-    height: 100vw;
+    height: fit-content;
     width: 20vw;
   }
 
@@ -113,9 +113,9 @@ td[data-field="prefect"][data-prefect="false"]::after {
   display: none;
   position: fixed;
   top: 79px;
-  left: 28px;
-  height: 50vw;
-  width: 60vw;
+  left: 100px;
+  height: fit-content;
+  width: auto;
   margin: 4rem auto;
   border-radius: 25px;
   background-color: #f967ac;
