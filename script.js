@@ -1,7 +1,8 @@
 "use strict";
 
 //........................VARIABLES........................//
-let allStudents= [];
+let allStudents = [];
+let bloodStatusJSON = {};
 let filteredStudents;
 // let filterBy = "*";
 const settings = {
@@ -14,16 +15,15 @@ const Student = {
     firstName: "",
     lastName: "",
     middleName: "",
+    fullName: "",
     nickName: "",
     gender: "",
     imgSrc: "",
     house: "",
-    prefect: false
+    bloodStatus: "",
+    prefect: false,
+    expelled: false
 };
-
-const Fullblood = {
-
-}
 
 const theJsonfile1 = "https://petlatkea.dk/2021/hogwarts/families.json";
 const theJsonfile2 = "https://petlatkea.dk/2021/hogwarts/students.json";
@@ -34,8 +34,8 @@ window.addEventListener("DOMContentLoaded", start);
 
 async function start() {
     registeredButtons();
-    // await loadJSON1();
-    await loadJSON2();
+    await loadBloodStatusJSON();
+    await loadStudentsJSON();
 };
 
 function registeredButtons() {
@@ -65,34 +65,24 @@ function searchFieldInput(evt) {
   
 //........................JSON........................//
 
-// async function loadJSON1() {
-//     const response = await fetch(theJsonfile1);
-//     let jsonData = await response.json();
-//   //  return  jsonData1;
-//     // cleaningUpJson();
-//     prepareBloodStatus (jsonData);
-// };
+async function loadBloodStatusJSON() {
+    const response = await fetch(theJsonfile1);
+    let jsonData = await response.json();
 
-// function prepareBloodStatus(jsonData){
-//     //allFamilies = jsonData.map(bloodStatusPrepared);
-//     console.log(jsonData)
-// }
+    bloodStatusJSON = jsonData;
+};
 
-// function bloodStatusPrepared(fullBloodObject) {
-//     const fullblood = Object.create(Fullblood)
-// }
-
-async function loadJSON2() {
+async function loadStudentsJSON() {
     const response = await fetch(theJsonfile2);
     let jsonData = await response.json();
   
-    prepareObjects (jsonData);
+    prepareStudentObject(jsonData);
 };
 
-function prepareObjects(jsonData) {
+function prepareStudentObject(jsonData) {
     
-    console.log("prepareObjects",jsonData)
-    allStudents = jsonData.map( prepareObject);
+    console.log("prepareObjects", jsonData)
+    allStudents = jsonData.map(prepareObject);
 
     buildList();
 }
@@ -105,13 +95,14 @@ function prepareObject(jsonObject) {
     let house = jsonObject.house.trim();
     let gender = jsonObject.gender.trim();
 
+    student.fullName = fullName.split(" ").map(n => n.charAt(0).toUpperCase() + n.slice(1)).join(" ");
           
     //Make firstnames
     if (fullName.includes(" ")) {
         student.firstName = 
         fullName.substring(0,1).toUpperCase() + 
         fullName.substring(1, fullName.indexOf(" ")).toLowerCase();
-    }else {
+    } else {
         student.firstName =
         fullName.substring(0, 1).toUpperCase() + fullName.substring(1).toLowerCase();
     }
@@ -159,11 +150,23 @@ function prepareObject(jsonObject) {
           .toLowerCase() + fullName.substring(fullName.lastIndexOf(" ") + 2).toLowerCase()
       }_${fullName.substring(0, 1).toUpperCase().toLowerCase()}.png`;
 
+    student.bloodStatus = getBloodStatus(student);
+
     allStudents.push(student);
      //  displayStudent(student);
-    displayList(allStudents);  
+    
     return student 
 };
+
+function getBloodStatus(student) {
+    if (bloodStatusJSON.pure.indexOf(student.lastName) > -1) {
+        return "pure";
+    } else if (bloodStatusJSON.half.indexOf(student.lastName) > -1) {
+        return "half-blood"
+    } else {
+        return "muggle";
+    }
+}
 
 //........................RENDER LIST........................//
 
@@ -179,8 +182,9 @@ function displayStudent(student) {
     clone.querySelector("[data-field=first_name]").textContent = student.firstName;
     clone.querySelector("[data-field=last_name]").textContent = student.lastName;
     clone.querySelector("[data-field=house]").textContent = student.house;
+    clone.querySelector("[data-field=blood_status]").textContent = student.bloodStatus;
 
-    clone.querySelector(".popup_button").addEventListener("click", openPopup);
+    clone.querySelector(".popup_button").addEventListener("click", () => openPopup(student));
    
 
     //prefect
@@ -195,6 +199,8 @@ function displayStudent(student) {
         }
         buildList();
     }
+
+
     document.querySelector("#list tbody").appendChild( clone );
 }
 
@@ -231,7 +237,7 @@ function filterList(filteredStudents){
     }else if (settings.filterBy === "Rawenclaw"){
         filteredStudents = allStudents.filter(filterByRawenclaw);    
     }
-    return filteredStudents;
+    return filteredStudents.filter(s => s.expelled === false);
 };
 
 function filterByGryffindor(student) {
@@ -302,29 +308,15 @@ function sortList(sortedList){
 
 function makePrefects(selectedStudent) {
 
-    const prefects = allStudents.filter( student => student.prefect);
+    const prefects = allStudents.filter(student => student.prefect && student.house === selectedStudent.house);
     const numberOfPrefects = prefects.length;
-    const other = prefects.filter(student => student.house === selectedStudent.house).shift();
-   
-   
-    if ( other !== undefined ,  numberOfPrefects >= 3) {
-        console.log(other, "there can only be 1 prefect of each house");
-        removeOther(other);
-    }else if ( selectedStudent.house === numberOfPrefects) {
+ 
+    if (numberOfPrefects >= 2) {
         console.log("there can only be 2 prefects");
         removeAorB(prefects[0],prefects[1]);
     }else{
         makePrefects(selectedStudent);
     }
-    // if ( other !== undefined) {
-    //     console.log("there can only be 1 prefect of each house");
-    //     removeOther(other);
-    // }else if ( selectedStudent.house === numberOfPrefects >= 2) {
-    //     console.log("there can only be 2 prefects");
-    //     removeAorB(prefects[0],prefects[1]);
-    // }else{
-    //     makePrefects(selectedStudent);
-    // }
 
   
 
@@ -401,13 +393,34 @@ function makePrefects(selectedStudent) {
 
 //........................POP UP........................//
 
-function openPopup() {
+function openPopup(student) {
     console.log("open sesame");
     const popup = document.querySelector(".popup");
     popup.style.display = "block";
+
+    document.querySelector(".full_name span").textContent = student.fullName;
+    document.querySelector(".nick_name span").textContent = student.nickName;
+    document.querySelector(".house span").textContent = student.house;
+    document.querySelector(".blood_status span").textContent = student.bloodStatus;
+
+    document.querySelector(".expel_student").addEventListener("click", () => expelStudent(student));
 };
 document.querySelector(".closePopup").addEventListener("click", CloseThePopup);
+
 
 function CloseThePopup(){
     document.querySelector(".popup").style.display = "none";
   };
+
+
+//........................EXPELLED STATUS........................//
+
+function expelStudent(student) {
+    if (confirm(`Do you want to expel ${student.firstName}?`)) {
+        student.expelled = true;
+        console.log(allStudents)
+        CloseThePopup();
+        buildList();
+    }
+}
+

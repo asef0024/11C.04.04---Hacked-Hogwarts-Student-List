@@ -79,6 +79,9 @@
             <th data-action="sort" data-sort-direction="asc" data-sort="house">
               House
             </th>
+            <th data-action="sort" data-sort-direction="asc" data-sort="blood_status">
+              Blood status
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -93,6 +96,7 @@
           <td data-field="first_name">First name</td>
           <td data-field="last_name">Last name</td>
           <td data-field="house">House</td>
+          <td data-field="blood_status">Blood status</td>
           <td>
             <button class="popup_button">Read more</button>
           </td>
@@ -130,10 +134,11 @@
       <button class="closePopup">X</button>
       <h3></h3>
       <img src="" alt="" />
-      <p>Full name</p>
-      <p>Nick name</p>
-      <p>House</p>
-      <p>Blood status</p>
+      <p class="full_name">Full name: <span></span></p>
+      <p class="nick_name">Nick name: <span></span></p>
+      <p class="house">House: <span></span></p>
+      <p class="blood_status">Blood status: <span></span></p>
+      <button class="expel_student">Expel this student</button>
     </article>
 </section>
     <script src="script.js"></script>
