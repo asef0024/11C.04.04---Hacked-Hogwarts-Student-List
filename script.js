@@ -267,23 +267,24 @@ function setFilter(filter) {
 }
 
 function filterList(filteredStudents){
+
+
+    if (settings.filterBy === "expelled"){
+        return allStudents.filter(filterByExpelled);   
+     }else if (settings.filterBy === "Slytherin"){
+         filteredStudents = allStudents.filter(filterBySlytherin);    
+     }else if (settings.filterBy === "Hufflepuff"){
+         filteredStudents = allStudents.filter(filterByHufflepuff);    
+     }else if (settings.filterBy === "Rawenclaw"){
+         filteredStudents = allStudents.filter(filterByRawenclaw);    
+     }else if (settings.filterBy === "Gryffindor"){
+         filteredStudents = allStudents.filter(filterByGryffindor);    
+     }else if (settings.filterBy === "non_expelled"){
+         filteredStudents = allStudents.filter(filterByNonExpelled);    
+     }
+     return filteredStudents.filter(s => s.expelled === false);
+ };
     
-    if (settings.filterBy === "Gryffindor"){
-       filteredStudents = allStudents.filter(filterByGryffindor); 
-       console.log(filteredStudents)
-    }else if (settings.filterBy === "Slytherin"){
-        filteredStudents = allStudents.filter(filterBySlytherin);    
-    }else if (settings.filterBy === "Hufflepuff"){
-        filteredStudents = allStudents.filter(filterByHufflepuff);    
-    }else if (settings.filterBy === "Rawenclaw"){
-        filteredStudents = allStudents.filter(filterByRawenclaw);    
-    }else if (settings.filterBy === "expelled"){
-        filteredStudents = allStudents.filter(filterByExpelled);    
-    }else if (settings.filterBy === "non_expelled"){
-        filteredStudents = allStudents.filter(filterByNonExpelled);    
-    }
-    return filteredStudents.filter(s => s.expelled === false);
-};
 
 function filterByGryffindor(student) {
     return student.house === "Gryffindor";
@@ -477,7 +478,6 @@ function CloseThePopup(){
 function expelStudent(student) {
     if (confirm(`Do you want to expel ${student.firstName}?`)) {
         student.expelled = true;
-        console.log(allStudents)
         CloseThePopup();
         buildList();
     }
