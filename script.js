@@ -196,6 +196,18 @@ function renderCounts(sortedList) {
        document.querySelector(".fact_box [data-field=ravenclaw]").textContent = ravenclaw;
        }
 
+       let non_expelled = 0;
+       for (let obj of allStudents) {
+           if (obj.expelled === false) non_expelled++;
+       document.querySelector(".fact_box [data-field=total_non_expelled]").textContent = non_expelled;
+       }
+
+       let total_expelled = 0;
+       for (let obj of allStudents) {
+           if (obj.expelled === true) total_expelled++;
+       document.querySelector(".fact_box [data-field=total_expelled]").textContent = total_expelled;
+       }
+
        document.querySelector(".fact_box [data-field=student_showing]").textContent = `${sortedList.length}`;
 }
 
