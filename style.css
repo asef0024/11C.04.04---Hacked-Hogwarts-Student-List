@@ -155,6 +155,11 @@ td[data-field="prefect"][data-prefect="false"]::after {
   background-color: blue;
 } */
 
+.crest {
+  width: 5rem;
+  height: auto;
+}
+
 .modal {
   position: fixed;
   top: 0;
