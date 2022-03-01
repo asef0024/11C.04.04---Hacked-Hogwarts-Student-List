@@ -446,14 +446,17 @@ function openPopup(student) {
     // change color themes
     if (student.house === "Gryffindor") {
         document.querySelector(".popup").style.backgroundColor = "red";
-        // document.querySelector(".popup .crest").src = "asset1.svg";
+        document.querySelector(".popup .crest").src = "assets/Gryffindor.svg";
     }else if (student.house === "Slytherin") {
         document.querySelector(".popup").style.backgroundColor = "green";
+        document.querySelector(".popup .crest").src = "assets/Slytherin.svg";
     }else if (student.house === "Hufflepuff") {
         document.querySelector(".popup").style.backgroundColor = "black";
+        document.querySelector(".popup .crest").src = "assets/Hufflepuff.svg";
         document.querySelectorAll(".popup p").style.color = "white";
     }else if (student.house === "Ravenclaw") {
         document.querySelector(".popup").style.backgroundColor = "blue";
+        document.querySelector(".popup .crest").src = "assets/Rawenclaw.svg";
     }
 
     document.querySelector("img").scr = student.imgSrc;
