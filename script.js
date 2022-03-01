@@ -141,14 +141,13 @@ function prepareObject(jsonObject) {
     student.house = house.charAt(0).toUpperCase() + house.substring(1).toLowerCase();
 
     //img 
-    student.imgSrc = `./images/${fullName
-        .substring(0, fullName.indexOf(" "))
-        .toLowerCase()}_.png`;
-      student.imgSrc = `./images/${
-        fullName
-          .substring(fullName.lastIndexOf(" ") + 1, fullName.lastIndexOf(" ") + 2)
-          .toLowerCase() + fullName.substring(fullName.lastIndexOf(" ") + 2).toLowerCase()
-      }_${fullName.substring(0, 1).toUpperCase().toLowerCase()}.png`;
+    student.imgSrc = `/images ${fullName.substring(0, fullName.indexOf(" ")).toLowerCase()}_.png`;
+    //   student.imgSrc = `/images ${fullName
+    //       .substring(fullName.lastIndexOf(" ") + 1, fullName.lastIndexOf(" ") + 2)
+    //       .toLowerCase() + fullName.substring(fullName.lastIndexOf(" ") + 2).toLowerCase()
+    //   }_${fullName.substring(0, 1).toUpperCase().toLowerCase()}.png`;
+
+    //   console.log(student.imgSrc)
 
     student.bloodStatus = getBloodStatus(student);
 
@@ -278,6 +277,10 @@ function filterList(filteredStudents){
         filteredStudents = allStudents.filter(filterByHufflepuff);    
     }else if (settings.filterBy === "Rawenclaw"){
         filteredStudents = allStudents.filter(filterByRawenclaw);    
+    }else if (settings.filterBy === "expelled"){
+        filteredStudents = allStudents.filter(filterByExpelled);    
+    }else if (settings.filterBy === "non_expelled"){
+        filteredStudents = allStudents.filter(filterByNonExpelled);    
     }
     return filteredStudents.filter(s => s.expelled === false);
 };
@@ -293,6 +296,12 @@ function filterByHufflepuff(student) {
 }
 function filterByRawenclaw(student) {
     return student.house === "Rawenclaw";
+}
+function filterByExpelled(student) {
+    return student.expelled === true;
+}
+function filterByNonExpelled(student) {
+    return student.expelled === false;
 }
 
 //........................SORT........................//
@@ -411,13 +420,47 @@ function openPopup(student) {
     const popup = document.querySelector(".popup");
     popup.style.display = "block";
 
-    document.querySelector(".full_name span").textContent = student.fullName;
-    document.querySelector(".nick_name span").textContent = student.nickName;
-    document.querySelector(".house span").textContent = student.house;
-    document.querySelector(".blood_status span").textContent = student.bloodStatus;
+
+    document.querySelector(".popup h3").textContent = student.firstName + " " + student.lastName;
+    document.querySelector(".first_name").textContent = "First name:" + " " + student.firstName;
+    document.querySelector(".last_name").textContent = "Last name:" + " " + student.lastName;
+    if (student.middleName === " " || student.middleName === "") {
+        document.querySelector(".middle_name").textContent = student.middleName;
+    } else {
+        document.querySelector(".middle_name").textContent = "Middle name:" + " " + student.middleName;
+    }
+    if (student.nickName === " ") {
+        document.querySelector(".nick_name").textContent = student.nickName;
+    } else {
+        document.querySelector(".nick_name").textContent = "Nick name:" + " " + student.nickName;
+    }
+    document.querySelector(".house").textContent = "House:" + " " +student.house;
+    
+    document.querySelector(".blood_status").textContent = "Blood status:" + " " +student.bloodStatus;
+    if (student.prefect === false){
+        document.querySelector(".prefect").textContent = "Prefect:" + " " + "No";
+    }else {
+        document.querySelector(".prefect").textContent = "Prefect:" + " " +"Yes";
+    }
+
+    // change color themes
+    if (student.house === "Gryffindor") {
+        document.querySelector(".popup").style.backgroundColor = "red";
+        // document.querySelector(".popup .crest").src = "asset1.svg";
+    }else if (student.house === "Slytherin") {
+        document.querySelector(".popup").style.backgroundColor = "green";
+    }else if (student.house === "Hufflepuff") {
+        document.querySelector(".popup").style.backgroundColor = "black";
+        document.querySelectorAll(".popup p").style.color = "white";
+    }else if (student.house === "Ravenclaw") {
+        document.querySelector(".popup").style.backgroundColor = "blue";
+    }
+
+    document.querySelector("img").scr = student.imgSrc;
 
     document.querySelector(".expel_student").addEventListener("click", () => expelStudent(student));
 };
+
 document.querySelector(".closePopup").addEventListener("click", CloseThePopup);
 
 
