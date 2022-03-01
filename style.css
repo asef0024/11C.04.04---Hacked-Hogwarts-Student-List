@@ -73,8 +73,9 @@ td[data-field="prefect"][data-prefect="false"]::after {
 
 .fact_box {
   background-color: bisque;
-  height: 20vw;
+  height: fit-content;
   width: 80vw;
+  padding: 0.2rem;
 }
 
 .search_field {
@@ -92,7 +93,7 @@ td[data-field="prefect"][data-prefect="false"]::after {
 
   .fact_box {
     background-color: bisque;
-    height: 50vw;
+    height: 100vw;
     width: 20vw;
   }
 

@@ -81,7 +81,6 @@ async function loadStudentsJSON() {
 
 function prepareStudentObject(jsonData) {
     
-    console.log("prepareObjects", jsonData)
     allStudents = jsonData.map(prepareObject);
 
     buildList();
@@ -95,6 +94,7 @@ function prepareObject(jsonObject) {
     let house = jsonObject.house.trim();
     let gender = jsonObject.gender.trim();
 
+    // Make fullname
     student.fullName = fullName.split(" ").map(n => n.charAt(0).toUpperCase() + n.slice(1)).join(" ");
           
     //Make firstnames
@@ -170,6 +170,35 @@ function getBloodStatus(student) {
 
 //........................RENDER LIST........................//
 
+function renderCounts(sortedList) {
+       // render amount to fact box
+       let gryffindor = 0;
+       for (let obj of allStudents) {
+           if (obj.house === 'Gryffindor') gryffindor++;
+       document.querySelector(".fact_box [data-field=gryffindor]").textContent = gryffindor;
+       }
+   
+       let slytherin = 0;
+       for (let obj of allStudents) {
+           if (obj.house === 'Slytherin') slytherin++;
+       document.querySelector(".fact_box [data-field=slytherin]").textContent = slytherin;
+       }
+   
+       let hufflepuff = 0;
+       for (let obj of allStudents) {
+           if (obj.house === 'Hufflepuff') hufflepuff++;
+        document.querySelector(".fact_box [data-field=hufflepuff]").textContent = hufflepuff;
+       }
+   
+       let ravenclaw = 0;
+       for (let obj of allStudents) {
+           if (obj.house === 'Ravenclaw') ravenclaw++;
+       document.querySelector(".fact_box [data-field=ravenclaw]").textContent = ravenclaw;
+       }
+
+       document.querySelector(".fact_box [data-field=student_showing]").textContent = `${sortedList.length}`;
+}
+
 function displayList(students) {
     document.querySelector("#list tbody").innerHTML = "";
     students.forEach(displayStudent);
@@ -207,7 +236,8 @@ function displayStudent(student) {
 function buildList() {
     let currentList = filterList(allStudents);
     const sortedList = sortList(currentList);
-
+    
+    renderCounts(sortedList);
     displayList(sortedList);
 }
 
@@ -241,7 +271,6 @@ function filterList(filteredStudents){
 };
 
 function filterByGryffindor(student) {
-    
     return student.house === "Gryffindor";
 }
 function filterBySlytherin(student) {
@@ -318,34 +347,6 @@ function makePrefects(selectedStudent) {
         makePrefects(selectedStudent);
     }
 
-  
-
-    function removeOther(other) {
-        document.querySelector("#remove_other").classList.remove("hide");
-        document.querySelector("#remove_other .closebutton").addEventListener("click", closeDialog);
-        document.querySelector("#remove_other #removeother").addEventListener("click", clickRemoveOther);
-        document.querySelector("#remove_other [data-field=otherprefect]").textContent = other.firstName;
-
-         // ask the user to ignore or remove "others"
-        function closeDialog() {
-            document.querySelector("#remove_other").classList.add("hide");
-            document.querySelector("#remove_other #removeother").removeEventListener("click", clickRemoveOther);
-            document.querySelector("#remove_other .closebutton").removeEventListener("click", closeDialog);
-        }
-        //if ignore - do nothing
-        function clickRemoveOther() {
-            removePrefect(other);
-            makePrefects(selectedStudent);
-            buildList();
-            closeDialog();
-        }
-        
-
-        //if remove other:
-        removePrefect(other);
-        makePrefects(selectedStudent);
-
-    }
 
     function removeAorB(prefectA, prefectB) {
 
