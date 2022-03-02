@@ -43,6 +43,9 @@ h1 {
   border-right: rgb(171, 219, 252) 1px dotted;
 }
 
+td[data-field="prefect"] {
+  text-align: center;
+}
 td[data-field="prefect"]::after {
   content: "🏆";
 }
@@ -51,7 +54,18 @@ td[data-field="prefect"][data-prefect="false"]::after {
   content: "🏆";
   filter: grayscale(1);
 }
+td[data-field="squad"] {
+  text-align: center;
+}
+td[data-field="squad"]::after {
+  content: "🎖️";
+  font-size: 1.5rem;
+}
 
+td[data-field="squad"][data-squad="false"]::after {
+  content: "🎖️";
+  filter: grayscale(1);
+}
 /* ****** STAR ******
 
 [data-field="star"] {
@@ -132,11 +146,11 @@ td[data-field="prefect"][data-prefect="false"]::after {
   color: #f9af1d;
   position: fixed;
   cursor: pointer;
-  top: 5em;
-  left: 10.8em;
+  top: 5.5em;
+  left: 10em;
   background-color: transparent;
   box-shadow: none;
-  font-size: 31px;
+  font-size: 25px;
   padding: 0;
 }
 

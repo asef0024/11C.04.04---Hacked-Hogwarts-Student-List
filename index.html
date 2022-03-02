@@ -33,12 +33,31 @@
           Rawenclaw
         </button>
       </div>
+      <h3>Blood status</h3>
+      <button class="filter" data-action="filter" data-filter="full_blood">
+        Full blood
+      </button> 
+      <button class="filter" data-action="filter" data-filter="half_blood">
+        Half blood
+      </button> 
+      <button class="filter" data-action="filter" data-filter="muggle">
+        Muggle born
+      </button>
+
       <p>Status</p>
         <button class="filter" data-action="filter" data-filter="expelled">
           Expelled
         </button>
         <button class="filter" data-action="filter" data-filter="non_expelled">
           Non-expelled
+        </button>
+
+        <button class="filter" data-action="filter" data-filter="prefects">
+          Prefects
+        </button>
+
+        <button class="filter" data-action="filter" data-filter="squad">
+          Inquisitorial squad
         </button>
 
         <p>Filter:</p> 
@@ -52,7 +71,7 @@
       <section class="student_overview">
       <section class="theSearchField">
         <!-- søgefelt -->
-        <div class="search_field">Here is the search field
+        <div class="search_field">
           <label for="search">Search:</label>
           <input type="text" id="search" name="search" size="10">
         </div>
@@ -77,6 +96,10 @@
             data-action="sort" data-sort-direction="asc" data-sort="prefect">
             Prefect
           </th>
+          <th
+          data-action="sort" data-sort-direction="asc" data-sort="squad">
+          🎖️
+        </th>
             <th
               data-action="sort" data-sort-direction="asc" data-sort="firstName">
               First name
@@ -102,6 +125,7 @@
       <template id="student">
         <tr>
           <td data-field="prefect" data-prefect="false"> </td>
+          <td data-field="squad" data-squad="false"> </td>
           <td data-field="first_name">First name</td>
           <td data-field="last_name">Last name</td>
           <td data-field="house">House</td>
@@ -141,21 +165,23 @@
     <!-- pop up -->
     <article class="popup">
       <div>
-      <button class="closePopup">X</button>
-      <img class="crest" src="" alt="">
-      <h3></h3>
-    </div>
-    <div class="popup_text">
-      <img class="student_img" src="" alt="" />
-      <p class="first_name"></p>
-      <p class="last_name"></p>
-      <p class="middle_name"></p>
-      <p class="nick_name"></p>
-      <p class="house"></p>
-      <p class="blood_status"></p>
-      <p class="prefect"></p>
-      <button class="expel_student">Expel this student</button>
-    </div>
+        <button class="closePopup">X</button>
+        <img class="crest" src="" alt="">
+        <h3></h3>
+      </div>
+      <div class="popup_text">
+        <img class="student_img" src="" alt="" />
+        <p class="first_name"></p>
+        <p class="last_name"></p>
+        <p class="middle_name"></p>
+        <p class="nick_name"></p>
+        <p class="house"></p>
+        <p class="blood_status"></p>
+        <p class="squad_member"></p>
+        <p class="prefect"></p>
+        <button class="expel_student">Expel this student</button>
+        <button class="squad">Make </button>
+      </div>
     </article>
 </section>
     <script src="script.js"></script>

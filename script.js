@@ -22,7 +22,8 @@ const Student = {
     house: "",
     bloodStatus: "",
     prefect: false,
-    expelled: false
+    expelled: false,
+    squad: false
 };
 
 const theJsonfile1 = "https://petlatkea.dk/2021/hogwarts/families.json";
@@ -240,6 +241,22 @@ function displayStudent(student) {
         buildList();
     }
 
+    clone.querySelector("[data-field=squad]").dataset.squad = student.squad;
+    clone.querySelector("[data-field=squad]").addEventListener("click", clickSquad);
+
+    function clickSquad() {
+        if (student.bloodStatus === "pure") {   
+            if (student.squad === true) {
+            student.squad = false;
+        }else {
+            student.squad = true;
+        }
+        buildList();
+        }else {
+            alert("Only pure bloods can join the Inquisitorial squad!");
+        }
+    };
+
 
     document.querySelector("#list tbody").appendChild( clone );
 }
@@ -281,7 +298,17 @@ function filterList(filteredStudents){
          filteredStudents = allStudents.filter(filterByGryffindor);    
      }else if (settings.filterBy === "non_expelled"){
          filteredStudents = allStudents.filter(filterByNonExpelled);    
-     }
+     }else if (settings.filterBy === "prefects"){
+        filteredStudents = allStudents.filter(filterByPrefect);    
+    }else if (settings.filterBy === "squad"){
+        filteredStudents = allStudents.filter(filterBySquad);    
+    }else if (settings.filterBy === "full_blood"){
+        filteredStudents = allStudents.filter(filterByPureBlood);    
+    }else if (settings.filterBy === "half_blood"){
+        filteredStudents = allStudents.filter(filterByHalfBlood);    
+    }else if (settings.filterBy === "muggle"){
+        filteredStudents = allStudents.filter(filterByMuggles);    
+    }
      return filteredStudents.filter(s => s.expelled === false);
  };
     
@@ -301,8 +328,20 @@ function filterByRawenclaw(student) {
 function filterByExpelled(student) {
     return student.expelled === true;
 }
-function filterByNonExpelled(student) {
-    return student.expelled === false;
+function filterByPrefect(student) {
+    return student.prefect === true;
+}
+function filterBySquad(student) {
+    return student.squad === true;
+}
+function filterByPureBlood(student) {
+    return student.bloodStatus === "pure";
+}
+function filterByHalfBlood(student) {
+    return student.bloodStatus === "half-blood";
+}
+function filterByMuggles(student) {
+    return student.bloodStatus === "muggle";
 }
 
 //........................SORT........................//
@@ -354,6 +393,7 @@ function sortList(sortedList){
     return sortedList;
 };
 
+   
 
 //........................PREFECT........................//
 
@@ -421,7 +461,7 @@ function openPopup(student) {
     const popup = document.querySelector(".popup");
     popup.style.display = "block";
 
-
+    // SHOW STUDENT INFO
     document.querySelector(".popup h3").textContent = student.firstName + " " + student.lastName;
     document.querySelector(".first_name").textContent = "First name:" + " " + student.firstName;
     document.querySelector(".last_name").textContent = "Last name:" + " " + student.lastName;
@@ -430,7 +470,7 @@ function openPopup(student) {
     } else {
         document.querySelector(".middle_name").textContent = "Middle name:" + " " + student.middleName;
     }
-    if (student.nickName === " ") {
+    if (student.nickName === "") {
         document.querySelector(".nick_name").textContent = student.nickName;
     } else {
         document.querySelector(".nick_name").textContent = "Nick name:" + " " + student.nickName;
@@ -444,7 +484,21 @@ function openPopup(student) {
         document.querySelector(".prefect").textContent = "Prefect:" + " " +"Yes";
     }
 
-    // change color themes
+    // EXPEL STUDENTS
+    document.querySelector(".student_img").src = student.imgSrc;
+    document.querySelector(".expel_student").textContent = "Expel" + " " + student.firstName;
+    document.querySelector(".expel_student").addEventListener("click", () => expelStudent(student));
+
+    // THE INQUISITORIAL SQUAD
+    
+    document.querySelector(".squad_member").textContent = "Inquisitorial squad:" + " " + "No";
+
+    if (student.squad === true){
+
+    document.querySelector(".squad_member").textContent = "Inquisitorial squad:" + " " + "yes";
+    }
+
+  // CHANGE COLOR THEMES
     if (student.house === "Gryffindor") {
         document.querySelector(".popup").style.backgroundColor = "red";
         document.querySelector(".popup .crest").src = "assets/Gryffindor.svg";
@@ -452,17 +506,14 @@ function openPopup(student) {
         document.querySelector(".popup").style.backgroundColor = "green";
         document.querySelector(".popup .crest").src = "assets/Slytherin.svg";
     }else if (student.house === "Hufflepuff") {
+        document.querySelector(".popup").style.color = "white";
         document.querySelector(".popup").style.backgroundColor = "black";
         document.querySelector(".popup .crest").src = "assets/Hufflepuff.svg";
-        document.querySelector(".popup .popup_text").style.color = "#FFFFFF";
     }else if (student.house === "Ravenclaw") {
         document.querySelector(".popup").style.backgroundColor = "blue";
         document.querySelector(".popup .crest").src = "assets/Rawenclaw.svg";
     }
-
-    document.querySelector(".student_img").src = student.imgSrc;
-
-    document.querySelector(".expel_student").addEventListener("click", () => expelStudent(student));
+    
 };
 
 document.querySelector(".closePopup").addEventListener("click", CloseThePopup);
