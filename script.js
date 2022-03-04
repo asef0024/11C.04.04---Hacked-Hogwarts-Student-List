@@ -228,19 +228,25 @@ function displayStudent(student) {
     clone.querySelector(".popup_button").addEventListener("click", () => openPopup(student));
    
 
-    //prefect
+
+    // PREFECT
     clone.querySelector("[data-field=prefect]").dataset.prefect = student.prefect;
     clone.querySelector("[data-field=prefect]").addEventListener("click", clickPrefect);
 
     function clickPrefect() {
         if (student.prefect === true) {
             student.prefect = false;
-        }else {
+        }else if (student.expelled === true) {
+            student.prefect = false;
+            alert("Expelled students can't be made prefects")
+        }
+        else {
             makePrefects(student);
         }
         buildList();
     }
 
+    // INQUISITORIAL SQUAD
     clone.querySelector("[data-field=squad]").dataset.squad = student.squad;
     clone.querySelector("[data-field=squad]").addEventListener("click", clickSquad);
 
@@ -248,12 +254,17 @@ function displayStudent(student) {
         if (student.bloodStatus === "pure") {   
             if (student.squad === true) {
             student.squad = false;
-        }else {
-            student.squad = true;
-        }
+             }else if(student.expelled === true ){
+                 student.squad = false;
+                 alert("Expelled students can't join the Inquisitorial squad! ")
+             }
+             else {
+                student.squad = true;
+            }
         buildList();
-        }else {
-            alert("Only pure bloods can join the Inquisitorial squad!");
+        } 
+        else {
+            alert("Only pure bloods or non expelled students can join the Inquisitorial squad!");
         }
     };
 
@@ -264,6 +275,7 @@ function displayStudent(student) {
 function buildList() {
     let currentList = filterList(allStudents);
     const sortedList = sortList(currentList);
+
     
     renderCounts(sortedList);
     displayList(sortedList);
@@ -273,7 +285,6 @@ function buildList() {
 
 function selectFilter(event) {
     let filter = event.target.dataset.filter;
-    console.log(filter)
     setFilter(filter);
 }
 
@@ -292,8 +303,8 @@ function filterList(filteredStudents){
          filteredStudents = allStudents.filter(filterBySlytherin);    
      }else if (settings.filterBy === "Hufflepuff"){
          filteredStudents = allStudents.filter(filterByHufflepuff);    
-     }else if (settings.filterBy === "Rawenclaw"){
-         filteredStudents = allStudents.filter(filterByRawenclaw);    
+     }else if (settings.filterBy === "Ravenclaw"){
+         filteredStudents = allStudents.filter(filterByRavenclaw);    
      }else if (settings.filterBy === "Gryffindor"){
          filteredStudents = allStudents.filter(filterByGryffindor);    
      }else if (settings.filterBy === "non_expelled"){
@@ -322,11 +333,14 @@ function filterBySlytherin(student) {
 function filterByHufflepuff(student) {
     return student.house === "Hufflepuff";
 }
-function filterByRawenclaw(student) {
-    return student.house === "Rawenclaw";
+function filterByRavenclaw(student) {
+    return student.house === "Ravenclaw";
 }
 function filterByExpelled(student) {
     return student.expelled === true;
+}
+function filterByNonExpelled(student) {
+    return student.expelled === false;
 }
 function filterByPrefect(student) {
     return student.prefect === true;
@@ -363,7 +377,7 @@ function selectSort(event) {
     } else {
       event.target.dataset.sortDirection = "asc";
     }
-    // console.log(`user selected ${sortBy} - ${sortDir}`);
+   
     setSort(sortBy, sortDir);
   }
 
@@ -402,12 +416,14 @@ function makePrefects(selectedStudent) {
     const prefects = allStudents.filter(student => student.prefect && student.house === selectedStudent.house);
     const numberOfPrefects = prefects.length;
  
-    if (numberOfPrefects >= 2) {
+    
+        if (numberOfPrefects >= 2) {
         console.log("there can only be 2 prefects");
         removeAorB(prefects[0],prefects[1]);
-    }else{
+        }else{
         makePrefects(selectedStudent);
-    }
+        } 
+    
 
 
     function removeAorB(prefectA, prefectB) {
@@ -484,18 +500,21 @@ function openPopup(student) {
         document.querySelector(".prefect").textContent = "Prefect:" + " " +"Yes";
     }
 
-    // EXPEL STUDENTS
+    // SHOW PIC OF STUDENT
     document.querySelector(".student_img").src = student.imgSrc;
+
+    // EXPEL STUDENTS
     document.querySelector(".expel_student").textContent = "Expel" + " " + student.firstName;
     document.querySelector(".expel_student").addEventListener("click", () => expelStudent(student));
+    if (student.expelled === true) {
+
+    document.querySelector(".expel_student").classList.add("hide");
+    }
 
     // THE INQUISITORIAL SQUAD
-    
     document.querySelector(".squad_member").textContent = "Inquisitorial squad:" + " " + "No";
-
     if (student.squad === true){
-
-    document.querySelector(".squad_member").textContent = "Inquisitorial squad:" + " " + "yes";
+        document.querySelector(".squad_member").textContent = "Inquisitorial squad:" + " " + "yes";
     }
 
   // CHANGE COLOR THEMES
@@ -513,6 +532,18 @@ function openPopup(student) {
         document.querySelector(".popup").style.backgroundColor = "blue";
         document.querySelector(".popup .crest").src = "assets/Rawenclaw.svg";
     }
+
+    function expelStudent(student) {
+     if (confirm(`Do you want to expel ${student.firstName}?`)) {
+            student.expelled = true ;
+            student.prefect= false;
+
+            student.squad= false;
+            CloseThePopup();
+            buildList();
+        }
+    
+    }
     
 };
 
@@ -526,11 +557,14 @@ function CloseThePopup(){
 
 //........................EXPELLED STATUS........................//
 
-function expelStudent(student) {
-    if (confirm(`Do you want to expel ${student.firstName}?`)) {
-        student.expelled = true;
-        CloseThePopup();
-        buildList();
-    }
-}
+// function expelStudent(student) {
+//     if (student.expelled === true) {
+//         document.querySelector(".expel_student").classList.add(".hide")
+//     }else if (confirm(`Do you want to expel ${student.firstName}?`)) {
+//         student.expelled = true;
+//         CloseThePopup();
+//         buildList();
+//     }
+
+// }
 
