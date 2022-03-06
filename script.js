@@ -578,5 +578,4 @@ function hackTheSystem() {
     console.log("I solemnly swear that I am up to no good");
     buildList();
     document.querySelector("body").style.backgroundColor= "lightpink";
-
 }
