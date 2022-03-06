@@ -6,20 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hacked Hogwarts Student List</title>
     <link rel="stylesheet" href="style.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com"> 
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300&display=swap"
+      rel="stylesheet"
+    />
   </head>
 
   <body>
     <header>
+      <img class="hogwarts_crest" src="hogwarts.png" alt="" />
       <h1>Hacked Hogwarts Student List</h1>
     </header>
-    
-      <p class="filter_field">
-       
-        <div>
-        <p> Houses</p>
+
+    <section class="filter_field">
+      <div>
+        <p>Houses</p>
         <button class="filter" data-action="filter" data-filter="Gryffindor">
           Gryffindor
         </button>
@@ -36,127 +39,163 @@
       <h3>Blood status</h3>
       <button class="filter" data-action="filter" data-filter="full_blood">
         Full blood
-      </button> 
+      </button>
       <button class="filter" data-action="filter" data-filter="half_blood">
         Half blood
-      </button> 
+      </button>
       <button class="filter" data-action="filter" data-filter="muggle">
         Muggle born
       </button>
 
       <p>Status</p>
-        <button class="filter" data-action="filter" data-filter="expelled">
-          Expelled
-        </button>
-        <button class="filter" data-action="filter" data-filter="non_expelled">
-          Non-expelled
-        </button>
+      <button class="filter" data-action="filter" data-filter="expelled">
+        Expelled
+      </button>
+      <button class="filter" data-action="filter" data-filter="non_expelled">
+        Non-expelled
+      </button>
 
-        <button class="filter" data-action="filter" data-filter="prefects">
-          Prefects
-        </button>
+      <button class="filter" data-action="filter" data-filter="prefects">
+        Prefects
+      </button>
 
-        <button class="filter" data-action="filter" data-filter="squad">
-          Inquisitorial squad
-        </button>
+      <button class="filter" data-action="filter" data-filter="squad">
+        Inquisitorial squad
+      </button>
 
-        <p>Filter:</p> 
-        <button class="filter" data-action="filter" data-filter="*">
-          Remove filter(s)
-        </button>
-      </p>
+      <p>Filter:</p>
+      <button class="filter" data-action="filter" data-filter="*">
+        Remove filter(s)
+      </button>
+    </section>
 
-      <hr />
+    <!-- <hr /> -->
+
+   
 
       <section class="student_overview">
-      <section class="theSearchField">
-        <!-- søgefelt -->
-        <div class="search_field">
-          <label for="search">Search:</label>
-          <input type="text" id="search" name="search" size="10">
-        </div>
+
+        <section>
         <div class="fact_box">
-          <p>Number of students showing: <span data-field="student_showing"></span></p>
+          <p>
+            Number of students showing:
+            <span data-field="student_showing"></span>
+          </p>
           <h3>House members:</h3>
           <p>Gryffindor: <span data-field="gryffindor"></span></p>
           <p>Slytherin: <span data-field="slytherin"></span></p>
           <p>Ravenclaw: <span data-field="ravenclaw"></span></p>
           <p>Hufflepuff: <span data-field="hufflepuff"></span></p>
-          <p>Total number of students (not expelled): <span data-field="total_non_expelled"></span></p>
-          <p>Number of students expelled: <span data-field="total_expelled"></span></p>
+          <p>
+            Total number of students (not expelled):
+            <span data-field="total_non_expelled"></span>
+          </p>
+          <p>
+            Number of students expelled:
+            <span data-field="total_expelled"></span>
+          </p>
         </div>
-      </section>
-
-
-      <section class="the_list">
-      <table id="list">
-        <thead>
-          <tr id="sorting">
-            <th
-            data-action="sort" data-sort-direction="asc" data-sort="prefect">
-            Prefect
-          </th>
-          <th
-          data-action="sort" data-sort-direction="asc" data-sort="squad">
-         Squad
-        </th>
-            <th
-              data-action="sort" data-sort-direction="asc" data-sort="firstName">
-              First name
-            </th>
-            <th
-              data-action="sort" data-sort-direction="asc" data-sort="lastName">
-              Last name
-            </th>
-            <th data-action="sort" data-sort-direction="asc" data-sort="house">
-              House
-            </th>
-            <th data-action="sort" data-sort-direction="asc" data-sort="blood_status">
-              Blood status
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- animal template will be copied and inserted here -->
-        </tbody>
-      </table>
-      
-
-      <template id="student">
-        <tr>
-          <td data-field="prefect" data-prefect="false"> </td>
-          <td data-field="squad" data-squad="false"> </td>
-          <td data-field="first_name">First name</td>
-          <td data-field="last_name">Last name</td>
-          <td data-field="house">House</td>
-          <td data-field="blood_status">Blood status</td>
-          <td>
-            <button class="popup_button">Read more</button>
-          </td>
-        </tr>
-      </template>
-
-      <div id="remove_aorb" class="modal hide">
-        <div class="dialog">
-          <button class="closebutton">X</button>
-          <h1>Warning!</h1>
-          <p>There can only be 2 prefects from each house<br>
-          Do you want to remove 1 of the chosen prefects?</p>
-          <div class="sidebyside">
-          <button id="removeA">Remove<span data-field="prefectA">A</span></button>
-          <button id="removeB">Remove<span data-field="prefectB">B</span></button>
+      <section class="theSearchField">
+        <!-- søgefelt -->
+        <div class="search_field">
+          <label for="search">Search:</label>
+          <input type="text" id="search" name="search" size="10" />
         </div>
-        </div>
-      </div>
       </section>
     </section>
+      <section class="the_list">
+        <table id="list">
+          <thead>
+            <tr id="sorting">
+              <th
+                data-action="sort"
+                data-sort-direction="asc"
+                data-sort="prefect"
+              >
+                Prefect
+              </th>
+              <th
+                data-action="sort"
+                data-sort-direction="asc"
+                data-sort="squad"
+              >
+                Squad
+              </th>
+              <th
+                data-action="sort"
+                data-sort-direction="asc"
+                data-sort="firstName"
+              >
+                First name
+              </th>
+              <th
+                data-action="sort"
+                data-sort-direction="asc"
+                data-sort="lastName"
+              >
+                Last name
+              </th>
+              <th
+                data-action="sort"
+                data-sort-direction="asc"
+                data-sort="house"
+              >
+                House
+              </th>
+              <th
+                data-action="sort"
+                data-sort-direction="asc"
+                data-sort="blood_status"
+              >
+                Blood status
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- animal template will be copied and inserted here -->
+          </tbody>
+        </table>
+
+        <template id="student">
+          <tr>
+            <td data-field="prefect" data-prefect="false"></td>
+            <td data-field="squad" data-squad="false"></td>
+            <td data-field="first_name">First name</td>
+            <td data-field="last_name">Last name</td>
+            <td data-field="house">House</td>
+            <td data-field="blood_status">Blood status</td>
+            <td>
+              <button class="popup_button">Read more</button>
+            </td>
+          </tr>
+        </template>
+      </section>
+
+        <div id="remove_aorb" class="modal hide">
+          <div class="dialog">
+            <button class="closebutton">X</button>
+            <h1>Warning!</h1>
+            <p>
+              There can only be 2 prefects from each house<br />
+              Do you want to remove 1 of the chosen prefects?
+            </p>
+            <div class="sidebyside">
+              <button id="removeA">
+                Remove<span data-field="prefectA">A</span>
+              </button>
+              <button id="removeB">
+                Remove<span data-field="prefectB">B</span>
+              </button>
+            </div>
+          </div>
+        </div>
     
 
     <!-- pop up -->
     <article class="popup">
       <div>
         <button class="closePopup">X</button>
-        <img class="crest" src="" alt="">
+        <img class="crest" src="" alt="" />
         <h3></h3>
       </div>
       <div class="popup_text">
@@ -170,10 +209,9 @@
         <p class="squad_member"></p>
         <p class="prefect"></p>
         <button class="expel_student">Expel this student</button>
-        
       </div>
     </article>
-</section>
+
     <script src="script.js"></script>
   </body>
 </html>

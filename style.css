@@ -1,13 +1,35 @@
 * {
   font-family: "Montserrat", sans-serif;
   color: black;
-  margin: 10px 5px;
   font-size: 12px;
 }
 
+@font-face {
+  font-family: harry_font;
+  src: url(/assets/HARRYP__.TTF);
+}
+
+body {
+  margin: 2rem 1rem;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.hogwarts_crest {
+  width: 20vw;
+}
+
 h1 {
-  font-size: 2rem;
+  font-size: 4rem;
   margin-bottom: 20px;
+  font-family: harry_font;
+}
+
+h3 {
+  font-size: 1.3rem;
 }
 
 [data-action] {
@@ -89,12 +111,13 @@ td[data-field="squad"][data-squad="false"]::after {
   height: fit-content;
   width: 80vw;
   padding: 0.2rem;
+  text-align: left;
 }
 
 .search_field {
-  background-color: #f9af1d;
   height: 10vw;
   width: 80vw;
+  margin: 1rem;
 }
 
 /* web format */
@@ -104,14 +127,18 @@ td[data-field="squad"][data-squad="false"]::after {
     font-size: 16px;
   }
 
+  .filter_field {
+    margin-bottom: 3rem;
+  }
+
   .fact_box {
     background-color: bisque;
     height: fit-content;
-    width: 20vw;
+    width: 18rem;
+    margin-top: 5rem;
   }
 
   .search_field {
-    background-color: #f9af1d;
     height: 10vw;
     width: 20vw;
   }
@@ -119,6 +146,7 @@ td[data-field="squad"][data-squad="false"]::after {
   .student_overview {
     display: grid;
     grid-template-columns: 30% auto;
+    justify-content: center;
   }
 }
 /* POP UP */

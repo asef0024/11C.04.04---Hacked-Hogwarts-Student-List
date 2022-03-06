@@ -26,6 +26,21 @@ const Student = {
     squad: false
 };
 
+const myArray = {
+    firstName: "Asefeh",
+    lastName: "Zivlaei",
+    middleName: "Luca",
+    fullName: "Asefeh Luca Zivlaei",
+    nickName: "",
+    gender: "girl",
+    imgSrc: "",
+    house: "Gryffindor",
+    bloodStatus: "muggle",
+    prefect: false,
+    expelled: false,
+    squad: false
+}
+
 const theJsonfile1 = "https://petlatkea.dk/2021/hogwarts/families.json";
 const theJsonfile2 = "https://petlatkea.dk/2021/hogwarts/students.json";
 
@@ -505,6 +520,8 @@ function openPopup(student) {
     document.querySelector(".expel_student").classList.add("hide");
     }
 
+    
+
     // THE INQUISITORIAL SQUAD
     document.querySelector(".squad_member").textContent = "Inquisitorial squad:" + " " + "No";
     if (student.squad === true){
@@ -540,12 +557,26 @@ function CloseThePopup(){
 
 
 function expelStudent(student) {
-    if (confirm(`Do you want to expel ${student.firstName}?`)) {
+    if (student.firstName === "Asefeh") {
+        alert("Do NOT even try to expel ME!");
+        student.expelled = false ;
+        CloseThePopup();
+        buildList();
+    }else if (confirm(`Do you want to expel ${student.firstName}?`)) {
         student.expelled = true ;
         student.prefect= false;
         student.squad= false;
         CloseThePopup();
         buildList();
-       }
-   }
+    }
+}
 
+
+
+function hackTheSystem() {
+    allStudents.push(myArray);
+    console.log("I solemnly swear that I am up to no good");
+    buildList();
+    document.querySelector("body").style.backgroundColor= "lightpink";
+
+}
