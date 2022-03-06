@@ -76,13 +76,12 @@ td[data-field="squad"][data-squad="false"]::after {
 
 #sorting th {
   filter: grayscale(100%);
+  font-size: 1.2rem;
+  padding: 1rem;
 }
 
 .filter_field {
   text-align: center;
-}
-
-#list {
 }
 
 .fact_box {
@@ -153,21 +152,6 @@ td[data-field="squad"][data-squad="false"]::after {
   font-size: 25px;
   padding: 0;
 }
-
-/* .gryffindorColor {
-  background-color: red;
-}
-
-.slytherinColor {
-  background-color: green;
-}
-.hufflepuffColor {
-  background-color: black;
-  color: white;
-}
-.ravenclawColor {
-  background-color: blue;
-} */
 
 .crest {
   width: 5rem;

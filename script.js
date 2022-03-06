@@ -89,7 +89,6 @@ function prepareStudentObject(jsonData) {
 
 function prepareObject(jsonObject) {
     const student = Object.create(Student)
-    
         
     let fullName = jsonObject.fullname.trim();
     let house = jsonObject.house.trim();
@@ -224,11 +223,8 @@ function displayStudent(student) {
     clone.querySelector("[data-field=last_name]").textContent = student.lastName;
     clone.querySelector("[data-field=house]").textContent = student.house;
     clone.querySelector("[data-field=blood_status]").textContent = student.bloodStatus;
-
     clone.querySelector(".popup_button").addEventListener("click", () => openPopup(student));
    
-
-
     // PREFECT
     clone.querySelector("[data-field=prefect]").dataset.prefect = student.prefect;
     clone.querySelector("[data-field=prefect]").addEventListener("click", clickPrefect);
@@ -290,8 +286,7 @@ function selectFilter(event) {
 
 function setFilter(filter) {
     settings.filterBy =filter;
-    buildList();
-    
+    buildList();    
 }
 
 function filterList(filteredStudents){
@@ -417,12 +412,12 @@ function makePrefects(selectedStudent) {
     const numberOfPrefects = prefects.length;
  
     
-        if (numberOfPrefects >= 2) {
+    if (numberOfPrefects >= 2) {
         console.log("there can only be 2 prefects");
         removeAorB(prefects[0],prefects[1]);
-        }else{
+    }else{
         makePrefects(selectedStudent);
-        } 
+    } 
     
 
 
@@ -473,7 +468,6 @@ function makePrefects(selectedStudent) {
 //........................POP UP........................//
 
 function openPopup(student) {
-    console.log("open sesame");
     const popup = document.querySelector(".popup");
     popup.style.display = "block";
 
@@ -531,20 +525,7 @@ function openPopup(student) {
     }else if (student.house === "Ravenclaw") {
         document.querySelector(".popup").style.backgroundColor = "blue";
         document.querySelector(".popup .crest").src = "assets/Rawenclaw.svg";
-    }
-
-    function expelStudent(student) {
-     if (confirm(`Do you want to expel ${student.firstName}?`)) {
-            student.expelled = true ;
-            student.prefect= false;
-
-            student.squad= false;
-            CloseThePopup();
-            buildList();
-        }
-    
-    }
-    
+    }  
 };
 
 document.querySelector(".closePopup").addEventListener("click", CloseThePopup);
@@ -557,14 +538,14 @@ function CloseThePopup(){
 
 //........................EXPELLED STATUS........................//
 
-// function expelStudent(student) {
-//     if (student.expelled === true) {
-//         document.querySelector(".expel_student").classList.add(".hide")
-//     }else if (confirm(`Do you want to expel ${student.firstName}?`)) {
-//         student.expelled = true;
-//         CloseThePopup();
-//         buildList();
-//     }
 
-// }
+function expelStudent(student) {
+    if (confirm(`Do you want to expel ${student.firstName}?`)) {
+        student.expelled = true ;
+        student.prefect= false;
+        student.squad= false;
+        CloseThePopup();
+        buildList();
+       }
+   }
 
